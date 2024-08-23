@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Colectivos</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <!-- Encabezado con boton de busqueda o notificaciones, posible Logo -->
+    <header>
+        <h1>Seguimiento de Colectivos</h1>
+    </header>
+
+    <!-- Mapa en el centro -->
+    <div id="map"></div>
+
+    <!-- Menú inferior solamente con lineas y tiempo aproximado -->
+    <footer>
+        <label for="lineaSelect">Selecciona la línea:</label>
+        <select id="lineaSelect">
+            <option value="todas">Todas las líneas</option>
+            <option value="linea1">Línea 1</option>
+            <option value="linea2">Línea 2</option>
+            <!-- nuevas lineas de colectivos aqui -->
+        </select>
+        <p>Tiempo de llegada: </p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/osmtogeojson@3.0.0/osmtogeojson.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>
