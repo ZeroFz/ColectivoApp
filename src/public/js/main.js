@@ -137,7 +137,7 @@ setInterval(updateUserLocation, 5000);
 
 socket.on('newUserCoordinates', (coords) => {
     console.log('New user connected');
-    const marker = L.marker([coords.lat , coords.lng], { icon: busIcon });
+    const marker = L.marker([coords.lat + 0.001, coords.lng], { icon: busIcon });
     marker.bindPopup('Colectivo');
     map.addLayer(marker);
 });
