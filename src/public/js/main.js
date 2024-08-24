@@ -104,15 +104,36 @@ var busIcon = L.icon({
     popupAnchor: [0, -32]
  });
 //facu prueba
-map.locate({ enableHighAccuracy: true });
+let marker; // Variable para almacenar el marcador
+let contador_de_refresh_Web = 0;
+// Función para actualizar la ubicación del usuario
+function updateUserLocation() {
+    map.locate({ enableHighAccuracy: true });
+}
+
+// Maneja el evento locationfound y actualiza el marcador
 map.on('locationfound', e => {
     const coords = [e.latlng.lat, e.latlng.lng];
-    const marker = L.marker(coords, { icon: userIcon });
-    marker.bindPopup('Estás aquí');
-    map.addLayer(marker);
+    
+    // Si ya existe un marcador, actualiza su posición
+    if (marker) {
+        marker.setLatLng(coords);
+    } else {
+        // Si no existe un marcador, crea uno nuevo
+        marker = L.marker(coords, { icon: userIcon });
+        marker.bindPopup('Estás aquí');
+        map.addLayer(marker);
+    }
+    
+    console.log("Recarga nro: " + contador_de_refresh_Web);
+    contador_de_refresh_Web = contador_de_refresh_Web + 1; // Console.log web
     // Enviar coordenadas al servidor
     socket.emit('userCoordinates', e.latlng);
 });
+
+// Solicita la ubicación del usuario cada 5 segundos
+setInterval(updateUserLocation, 5000);
+
 
 socket.on('newUserCoordinates', (coords) => {
     console.log('New user connected');
