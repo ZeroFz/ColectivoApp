@@ -141,3 +141,58 @@ socket.on('newUserCoordinates', (coords) => {
     marker.bindPopup('Colectivo');
     map.addLayer(marker);
 });
+
+// Función para calcular la distancia entre dos puntos
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3; // Radio de la Tierra en metros
+    const φ1 = lat1 * Math.PI/180; // φ, λ en radianes
+    const φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-lat1) * Math.PI/180;
+    const Δλ = (lon2-lon1) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    const d = R * c; // Distancia en metros
+    return d;
+}
+
+// Función para encontrar la parada más cercana
+function findNearestStop(userCoords) {
+    let nearestStop = null;
+    let shortestDistance = Infinity;
+
+    paradasGreen.forEach(stop => {
+        const distance = getDistance(userCoords.lat, userCoords.lng, stop.coords[0], stop.coords[1]);
+        if (distance < shortestDistance) {
+            shortestDistance = distance;
+            nearestStop = stop;
+        }
+    });
+
+    return nearestStop;
+}
+
+// Evento del botón "Parada más cercana"
+document.getElementById('nearest-stop-btn').addEventListener('click', () => {
+    // Ubicar al usuario y encontrar la parada más cercana
+    map.locate({ enableHighAccuracy: true });
+
+    // Evento 'locationfound' para cuando se encuentre la ubicación del usuario
+    map.once('locationfound', (e) => {
+        const userCoords = { lat: e.latlng.lat, lng: e.latlng.lng };
+        const nearestStop = findNearestStop(userCoords);
+        
+        if (nearestStop) {
+            map.setView(nearestStop.coords, 18); // Ajusta el zoom según lo necesario
+            L.popup()
+                .setLatLng(nearestStop.coords)
+                .setContent(`Parada más cercana: ${nearestStop.nombre}`)
+                .openOn(map);
+        } else {
+            alert('No se encontraron paradas cercanas.');
+        }
+    });
+});
