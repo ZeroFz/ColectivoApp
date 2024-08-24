@@ -1,0 +1,8 @@
+# Ignorar la carpeta node_modules y todas sus subcarpetas
+node_modules/
+
+# Otras carpetas o archivos que desees ignorar también se pueden añadir aquí
+.env
+dist/
+coverage/
+.DS_Store

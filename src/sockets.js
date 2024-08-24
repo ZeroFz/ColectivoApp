@@ -4,7 +4,9 @@ module.exports = (io) => {
         console.log('User connected');
 
         socket.on('userCoordinates', coords => {
-            console.log(coords)
+            const { lat, lng } = coords;
+            console.log('Latitud:', lat);
+            console.log('Longitud:', lng);
             socket.broadcast.emit('newUserCoordinates', coords);
         });
 
